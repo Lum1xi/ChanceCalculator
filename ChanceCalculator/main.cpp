@@ -45,8 +45,17 @@ void generate_statistics(Enemy enemy, int amount) {
 	int kills = 0;
 	int max_kills = 0;
 	int min_kills = INT_MAX;
+	double start_time = clock();
 	
 	for (int i = 0; i < amount; ++i) {
+		if (i % 200 == 0) {
+			double elapsed_time = clock() - start_time;
+			//clear console
+			system("cls");
+			cout << "Progress: " << i << "/" << amount << " (" << (elapsed_time / CLOCKS_PER_SEC) << " seconds elapsed)" << endl;
+			cout << "ETA: " << (amount - i) * (elapsed_time / CLOCKS_PER_SEC)/i << " seconds" << endl;
+
+		}
 		kills = generate_kills_untill_all_drops(enemy);
 		bool found = false;
 		for (size_t i = 0; i < total_stats.size(); ++i) {
@@ -67,6 +76,11 @@ void generate_statistics(Enemy enemy, int amount) {
 			min_kills = kills;
 		}
 	}
+	system("cls");
+	cout << "Simulation completed!" << endl;
+	cout << "time elapsed: " << (clock() - start_time) / CLOCKS_PER_SEC << " seconds" << endl;
+	cout << "Total kills: " << total_kills << endl;
+
 	cout << "average amount: " << total_kills / amount << endl;
 	cout << "max amount: " << max_kills << endl;
 	cout << "min amount: " << min_kills << endl;
@@ -152,7 +166,7 @@ int main() {
 	glacite_walker.add_item(Item("Leggings", 0.5));
 	glacite_walker.add_item(Item("Boots", 0.5));
 
-	generate_statistics(glacite_walker, 1000);
+	generate_statistics(glacite_walker, 100000);
 
 	return 0;
 }
